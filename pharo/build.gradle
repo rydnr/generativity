@@ -1,7 +1,7 @@
-version = 'develop'
+version = 'master'
 def tag = "${version}"
 def branch = "master"
-def branchOrTag="${tag}"
+def branchOrTag="${branch}"
 String release = 'latest'
 apply plugin: PharoPlugin
 
@@ -21,13 +21,13 @@ task removePreviousPharoImage(type: RemovePreviousPharoImageTask)
 
 task downloadFreshImage(type: DownloadPharoImageTask, dependsOn: removePreviousPharoImage)
 
-task loadGenerativity(type: EvalSmalltalkExpressionTask) {
+task loadGenerativity(type: EvalSmalltalkExpressionTask, dependsOn: downloadFreshImage) {
     pharoPath = customPharoPath
     commonPharoArgs = customPharoArgs
-    expression = "Metacello new repository: 'github://rydnr/generativity:${branchOrTag}/pharo/src'; configuration: 'Generativity'; version: #bleedingEdge; load"
+    expression = "Metacello new repository: 'github://rydnr/generativity:${branchOrTag}/pharo/src'; baseline: #Generativity; load"
 }
 
-task customizeImage(type: RunSmalltalkScriptTask, dependsOn: downloadFreshImage) {
+task customizeImage(type: RunSmalltalkScriptTask, dependsOn: loadGenerativity) {
     script = "customize.st"
     pharoPath = customPharoPath
     commonPharoArgs = customPharoArgs    

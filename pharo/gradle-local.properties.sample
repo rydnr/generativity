@@ -1,0 +1,3 @@
+pharoPath=/run/current-system/sw/bin/pharo-spur64
+pharoUiPath=/run/current-system/sw/bin/pharo-spur64
+pharoArgs=--encoding,utf8,--headless
